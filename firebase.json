@@ -1,0 +1,25 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "travelapp-5ce18",
+                    "appId": "1:692135151812:android:32fc3aa7d43e45703ae191",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "travelapp-5ce18",
+                    "configurations": {
+                        "android": "1:692135151812:android:32fc3aa7d43e45703ae191",
+                        "ios": "1:692135151812:ios:f8bd304cad5e92053ae191",
+                        "macos": "1:692135151812:ios:f8bd304cad5e92053ae191",
+                        "web": "1:692135151812:web:2f14f61e0cfe16e63ae191",
+                        "windows": "1:692135151812:web:04641f4fbf369c893ae191"
+                    }
+                }
+            }
+        }
+    }
+}
