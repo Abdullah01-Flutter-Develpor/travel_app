@@ -1,12 +1,13 @@
+// search_bar_widget.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:travel_app/routers/route_path_class.dart';
 
 class City {
   final String id;
   final String name;
+  final String imageUrl;
 
-  City({required this.id, required this.name});
+  City({required this.id, required this.name, required this.imageUrl});
 }
 
 class SearchBarWidget extends StatefulWidget {
@@ -18,25 +19,44 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   late SearchController _searchController;
 
   final List<City> _cities = [
-    City(id: '1', name: 'Islamabad'),
-    City(id: '2', name: 'Lahore'),
-    City(id: '3', name: 'Peshawar'),
-    City(id: '4', name: 'Murree'),
-    City(id: '5', name: 'Gilgit'),
-    City(id: '6', name: 'Skardu'),
-    City(id: '7', name: 'Swat'),
-    City(id: '8', name: 'Chitral'),
+    City(id: '1', name: 'Islamabad', imageUrl: 'assets2/images/islamabad.jpeg'),
+    City(id: '2', name: 'Lahore', imageUrl: 'assets2/images/lahore.jpeg'),
+    City(id: '3', name: 'Peshawar', imageUrl: 'assets2/images/peshawar.jpeg'),
+    City(id: '4', name: 'Murree', imageUrl: 'assets2/images/murree.jpeg'),
+    City(id: '5', name: 'Gilgit', imageUrl: 'assets2/images/gilgit.jpeg'),
+    City(id: '6', name: 'Skardu', imageUrl: 'assets2/images/skardu.jpeg'),
+    City(id: '7', name: 'Swat', imageUrl: 'assets2/images/swat.jpeg'),
+    City(id: '8', name: 'Chitral', imageUrl: 'assets2/images/chitral.jpeg'),
+    City(id: '9', name: 'Hunza', imageUrl: 'assets2/images/ hunzariver.jpeg'),
+    City(id: '10', name: 'Kumrat', imageUrl: 'assets2/images/kumraat.jpeg'),
+    City(
+        id: '11',
+        name: 'Kelash Valley',
+        imageUrl: 'assets2/images/kalash.jpeg'),
+    City(
+        id: '12',
+        name: 'Jahaz Banda',
+        imageUrl: 'assets2/images/jahabanda.jpeg'),
+    City(id: '14', name: 'Tirah Valley', imageUrl: 'assets2/images/tirah.jpeg'),
+    City(id: '15', name: 'Kashmir', imageUrl: 'assets2/images/kashmir.jpeg'),
+    City(
+        id: '16',
+        name: 'Neelum Valley',
+        imageUrl: 'assets2/images/neelum.jpeg'),
+    City(id: '17', name: 'Kel', imageUrl: 'assets2/images/kel.jpeg'),
   ];
 
   @override
   void initState() {
     super.initState();
-    _searchController = SearchController(); // Initialize the SearchController
+    _searchController = SearchController();
+    print('SearchBarWidget initialized');
   }
 
   @override
   void dispose() {
-    _searchController.dispose(); // Dispose the SearchController
+    print('SearchBarWidget disposed');
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -47,14 +67,14 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       builder: (context, controller) {
         return SearchBar(
           controller: controller,
-          padding: const MaterialStatePropertyAll<EdgeInsets>(
+          padding: const WidgetStatePropertyAll<EdgeInsets>(
             EdgeInsets.symmetric(horizontal: 16.0),
           ),
           onTap: () {
-            controller.openView(); // Open the search view
+            controller.openView();
           },
           onChanged: (query) {
-            controller.openView(); // Open the search view when typing
+            controller.openView();
           },
           leading: const Icon(Icons.search),
           hintText: 'Search for a city...',
@@ -73,18 +93,23 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           return ListTile(
             title: Text(city.name),
             onTap: () {
-              // Navigate to the city route using path parameters
               context.go(
                 '/${RoutePathClass.pathCity}/${city.name}/${city.id}',
+                extra: city.imageUrl,
               );
-
-              // Close the search view and clear the search bar
               controller.closeView(city.name);
-              _searchController.clear();
+              Future.delayed(Duration.zero, () {
+                _searchController.clear();
+              });
             },
           );
         });
       },
     );
   }
+}
+
+class RoutePathClass {
+  static const String pathCity =
+      'city'; // Assuming you have a route named 'city'
 }

@@ -15,19 +15,32 @@ class ImageCardWithDelete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
           // Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+          AspectRatio(
+            aspectRatio: 3 / 4, // Taller aspect ratio (3:4)
             child: Image.network(
               imageUrl,
               fit: BoxFit.cover,
-              height: 200,
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.broken_image, size: 100),
+              errorBuilder: (context, error, stackTrace) => const Center(
+                  child:
+                      Icon(Icons.broken_image, size: 50, color: Colors.grey)),
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
             ),
           ),
 
@@ -37,12 +50,15 @@ class ImageCardWithDelete extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.7),
+                    Colors.transparent,
+                  ],
                 ),
               ),
               child: Text(
@@ -50,9 +66,9 @@ class ImageCardWithDelete extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -62,9 +78,17 @@ class ImageCardWithDelete extends StatelessWidget {
           Positioned(
             top: 8,
             right: 8,
-            child: IconButton(
-              onPressed: onDelete,
-              icon: const Icon(Icons.delete, color: Colors.red),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: onDelete,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child:
+                      Icon(Icons.delete, color: Colors.red.shade600, size: 28),
+                ),
+              ),
             ),
           ),
         ],

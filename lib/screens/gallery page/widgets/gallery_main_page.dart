@@ -140,7 +140,7 @@ class _GalleryPageState extends State<GalleryPage> {
         staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
         itemBuilder: (context, index) {
           return Container(
-            height: 150,
+            height: 250, // Increased height for shimmer effect
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),

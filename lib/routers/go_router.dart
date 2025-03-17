@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel_app/routers/route_path_class.dart';
 import 'package:travel_app/screens/HomeScreen.dart';
-import 'package:travel_app/screens/city_page.dart';
+import 'package:travel_app/screens/city%20page%20widgets/city_page.dart';
 import 'package:travel_app/screens/gallery%20page/widgets/gallery_main_page.dart';
 import 'package:travel_app/screens/guide/widgets/guide_main_page.dart';
 import 'package:travel_app/screens/hotels/widgets/hotel_main_page.dart';

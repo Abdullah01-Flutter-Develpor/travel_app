@@ -16,87 +16,100 @@ class ReviewPage extends StatelessWidget {
       width: width,
       child: Center(
         child: localReviews.isNotEmpty
-            ? ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemExtent: height * 0.22,
-                itemCount: localReviews.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: ReviewWidget(
-                      reviewerName: 'Local User',
-                      reviewText: localReviews[index],
-                      rating: 5,
-                      onDelete: () {
-                        // Handle deletion of local review (if needed)
-                        print('Local review deleted');
-                      },
-                    ),
-                  );
-                },
-              )
-            : StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('reviews')
-                    .where('cityId', isEqualTo: cityId)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    print('Error: ${snapshot.error}');
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  }
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    print('No reviews found for cityId: $cityId');
-                    return Center(child: Text('No reviews available.'));
-                  }
-
-                  final reviews = snapshot.data!.docs.map((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    return Review.fromJson(
-                        data, doc.id); // Pass the document ID
-                  }).toList();
-
-                  print(
-                      'Fetched ${reviews.length} reviews for cityId: $cityId');
-                  for (final review in reviews) {
-                    print(
-                        'Review: ${review.comment}, CityId: ${review.cityId}');
-                  }
-
-                  reviews.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemExtent: height * 0.22,
-                    itemCount: reviews.length,
-                    itemBuilder: (context, index) {
-                      final review = reviews[index];
-                      return Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: ReviewWidget(
-                          reviewerName: review.userName,
-                          reviewText: review.comment,
-                          rating: review.rating,
-                          onDelete: () async {
-                            // Delete the review from Firebase
-                            await _deleteReviewFromFirebase(context, review.id);
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+            ? _buildLocalReviews(localReviews, height)
+            : _buildFirebaseReviews(context, cityId, height),
       ),
     );
   }
 
-  // Function to delete a review from Firebase
+  Widget _buildLocalReviews(List<String> localReviews, double itemHeight) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemExtent: itemHeight * 0.25,
+      itemCount: localReviews.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: Card(
+            elevation: 3,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ReviewWidget(
+                reviewerName: 'Local User',
+                reviewText: localReviews[index],
+                rating: 5,
+                onDelete: () {
+                  print('Local review deleted');
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFirebaseReviews(
+      BuildContext context, String cityId, double itemHeight) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('reviews')
+          .where('cityId', isEqualTo: cityId)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No reviews available.'));
+        }
+
+        final reviews = snapshot.data!.docs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return Review.fromJson(data, doc.id);
+        }).toList();
+
+        reviews.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemExtent: itemHeight * 0.25,
+          itemCount: reviews.length,
+          itemBuilder: (context, index) {
+            final review = reviews[index];
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ReviewWidget(
+                    reviewerName: review.userName,
+                    reviewText: review.comment,
+                    rating: review.rating,
+                    onDelete: () async {
+                      await _deleteReviewFromFirebase(context, review.id);
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _deleteReviewFromFirebase(
       BuildContext context, String reviewId) async {
     try {
@@ -105,7 +118,6 @@ class ReviewPage extends StatelessWidget {
           .doc(reviewId)
           .delete();
     } catch (e) {
-      print('Failed to delete review: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete review: $e')),
       );

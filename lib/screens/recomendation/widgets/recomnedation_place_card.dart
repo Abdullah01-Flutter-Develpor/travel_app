@@ -1,6 +1,13 @@
 // recomended_place_card.dart
+// ignore_for_file: deprecated_member_use
+
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart'; // Import share_plus
 
 class RecomendedPlaceCard extends StatelessWidget {
@@ -34,7 +41,25 @@ class RecomendedPlaceCard extends StatelessWidget {
 
   Future<void> _shareImage(BuildContext context) async {
     try {
-      await Share.share(recomendedPlaceImage, subject: recomendedPlaceName);
+      final response = await http.get(Uri.parse(recomendedPlaceImage));
+
+      if (response.statusCode == 200) {
+        if (kIsWeb) {
+          // Handle web-specific sharing logic (e.g., using a data URL)
+          Share.share(recomendedPlaceImage, subject: recomendedPlaceName);
+        } else {
+          final tempDir = await getTemporaryDirectory();
+          final file = File('${tempDir.path}/image.jpg');
+          await file.writeAsBytes(response.bodyBytes);
+
+          await Share.shareXFiles([XFile(file.path)],
+              subject: recomendedPlaceName);
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to download image')),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to share image: $e')),

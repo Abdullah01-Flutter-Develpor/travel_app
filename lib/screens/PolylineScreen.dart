@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
 import 'package:location/location.dart';
 
 import '../component/app_bar.dart';
@@ -29,10 +28,7 @@ class PolylineScreen extends StatefulWidget {
 class _PolylineScreenState extends State<PolylineScreen> {
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
-  Location _locationController = new Location();
-
-  static const LatLng _pGooglePlex = LatLng(45464, 122.0848);
-  static const LatLng _pApplePark = LatLng(37.3346, 122.0090);
+  Location _locationController = Location();
 
   LatLng? _currentP = null;
 
@@ -49,8 +45,6 @@ class _PolylineScreenState extends State<PolylineScreen> {
       },
     );
   }
-
-  String _address = 'Unknown';
 
   @override
   Widget build(BuildContext context) {
@@ -78,19 +72,19 @@ class _PolylineScreenState extends State<PolylineScreen> {
               ),
               markers: {
                 Marker(
-                  markerId: MarkerId("_currentLocation"),
+                  markerId: const MarkerId("_currentLocation"),
                   icon: BitmapDescriptor.defaultMarker,
                   position: _currentP!,
                 ),
                 Marker(
-                  markerId: MarkerId("_sourceLocation"),
+                  markerId: const MarkerId("_sourceLocation"),
                   icon: BitmapDescriptor.defaultMarker,
                   position: LatLng(
                       double.parse(widget.other_Latitude.toString()),
                       double.parse(widget.other_Longitude.toString())),
                 ),
                 Marker(
-                  markerId: MarkerId("_destionationLocation"),
+                  markerId: const MarkerId("_destionationLocation"),
                   icon: BitmapDescriptor.defaultMarker,
                   position: LatLng(
                       double.parse(widget.other_Latitude.toString()),
@@ -118,10 +112,11 @@ class _PolylineScreenState extends State<PolylineScreen> {
     PermissionStatus _permissionGranted;
 
     _serviceEnabled = await _locationController.serviceEnabled();
-    if (_serviceEnabled) {
+    if (!_serviceEnabled) {
       _serviceEnabled = await _locationController.requestService();
-    } else {
-      return;
+      if (!_serviceEnabled) {
+        return;
+      }
     }
 
     _permissionGranted = await _locationController.hasPermission();
@@ -148,14 +143,21 @@ class _PolylineScreenState extends State<PolylineScreen> {
   Future<List<LatLng>> getPolylinePoints() async {
     List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      'AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow',
-      PointLatLng(double.parse(widget.current_Latitude.toString()),
+
+    PolylineRequest request = PolylineRequest(
+      origin: PointLatLng(double.parse(widget.current_Latitude.toString()),
           double.parse(widget.current_Longitude.toString())),
-      PointLatLng(double.parse(widget.other_Latitude.toString()),
+      destination: PointLatLng(double.parse(widget.other_Latitude.toString()),
           double.parse(widget.other_Longitude.toString())),
-      travelMode: TravelMode.driving,
+      mode: TravelMode.driving,
     );
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      request: request,
+      googleApiKey:
+          'AIzaSyAjUxyQFWaj3pGvgFnLNoL8sy0g2Q6EnAI', // Replace with your actual API key
+    );
+
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
@@ -167,7 +169,7 @@ class _PolylineScreenState extends State<PolylineScreen> {
   }
 
   void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id,
         color: Colors.black,

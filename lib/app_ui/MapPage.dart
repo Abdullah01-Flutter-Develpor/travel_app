@@ -14,9 +14,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-
-
-  final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
   Location _locationController = new Location();
   static const LatLng _pGooglePlex = LatLng(37.4223, 122.0848);
   static const LatLng _pApplePark = LatLng(37.3346, 122.0090);
@@ -28,10 +27,10 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     getLocationUpdates().then(
-          (_) => {
+      (_) => {
         getPolylinePoints().then((coordinates) => {
-          generatePolyLineFromPoints(coordinates),
-        }),
+              generatePolyLineFromPoints(coordinates),
+            }),
       },
     );
   }
@@ -41,32 +40,32 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: _currentP == null
           ? const Center(
-        child: Text("Loading..."),
-      )
+              child: Text("Loading..."),
+            )
           : GoogleMap(
-        onMapCreated: ((GoogleMapController controller) =>
-            _mapController.complete(controller)),
-        initialCameraPosition: CameraPosition(
-          target: _pGooglePlex,
-          zoom: 13,
-        ),
-        markers: {
-          Marker(
-            markerId: MarkerId("_currentLocation"),
-            icon: BitmapDescriptor.defaultMarker,
-            position: _currentP!,
-          ),
-          Marker(
-              markerId: MarkerId("_sourceLocation"),
-              icon: BitmapDescriptor.defaultMarker,
-              position: _pGooglePlex),
-          Marker(
-              markerId: MarkerId("_destionationLocation"),
-              icon: BitmapDescriptor.defaultMarker,
-              position: _pApplePark)
-        },
-        polylines: Set<Polyline>.of(polylines.values),
-      ),
+              onMapCreated: ((GoogleMapController controller) =>
+                  _mapController.complete(controller)),
+              initialCameraPosition: CameraPosition(
+                target: _pGooglePlex,
+                zoom: 13,
+              ),
+              markers: {
+                Marker(
+                  markerId: MarkerId("_currentLocation"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: _currentP!,
+                ),
+                Marker(
+                    markerId: MarkerId("_sourceLocation"),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position: _pGooglePlex),
+                Marker(
+                    markerId: MarkerId("_destionationLocation"),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position: _pApplePark)
+              },
+              polylines: Set<Polyline>.of(polylines.values),
+            ),
     );
   }
 
@@ -116,11 +115,21 @@ class _MapPageState extends State<MapPage> {
   Future<List<LatLng>> getPolylinePoints() async {
     List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates('AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow',
-      PointLatLng(34.2000142, 72.1601544),
-      PointLatLng(35.683419, 71.638699),
-      travelMode: TravelMode.driving,
+
+    // Create a PolylineRequest object
+    PolylineRequest request = PolylineRequest(
+      origin: PointLatLng(34.2000142, 72.1601544),
+      destination: PointLatLng(35.683419, 71.638699),
+      mode: TravelMode.driving,
     );
+
+    // Call getRouteBetweenCoordinates with the request object and API key
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      request: request,
+      googleApiKey:
+          'YOUR_GOOGLE_MAPS_API_KEY', // Replace with your actual API key
+    );
+
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));

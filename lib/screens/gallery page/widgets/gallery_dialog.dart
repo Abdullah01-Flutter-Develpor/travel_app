@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ImagePickerDialog extends StatefulWidget {
-  final String cityId; // Add cityId parameter
+  final String cityId;
 
   const ImagePickerDialog({super.key, required this.cityId});
 
@@ -44,7 +44,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
 
       await FirebaseFirestore.instance
           .collection('cities')
-          .doc(widget.cityId) // Use cityId to save image
+          .doc(widget.cityId)
           .collection('gallery')
           .add({
         'imageUrl': imageUrl,
@@ -66,22 +66,46 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      title: const Text('Add New Image'),
+      title: Text('Add New Image',
+          style: TextStyle(
+              fontWeight: FontWeight.w600, color: Colors.blue.shade800)),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Image Name'),
+              decoration: InputDecoration(
+                labelText: 'Image Name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade400),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Required field' : null,
+              style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: _isUploading ? null : _pickImage,
-              icon: const Icon(Icons.image),
-              label: const Text('Select Image'),
+              icon: const Icon(Icons.image, color: Colors.white),
+              label: const Text('Select Image',
+                  style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade700,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              ),
             ),
             if (_imageFile != null)
               Padding(
@@ -99,11 +123,19 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
       ),
       actions: [
         TextButton(
-            onPressed: _isUploading ? null : () => Navigator.pop(context),
-            child: const Text('Cancel')),
+          onPressed: _isUploading ? null : () => Navigator.pop(context),
+          child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+        ),
         ElevatedButton(
-            onPressed: _isUploading ? null : _uploadImage,
-            child: const Text('Upload')),
+          onPressed: _isUploading ? null : _uploadImage,
+          child: const Text('Upload', style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue.shade700,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
       ],
     );
   }

@@ -7,33 +7,31 @@ class ReviewWidget extends StatelessWidget {
     required this.reviewerName,
     required this.reviewText,
     required this.rating,
-    required this.onDelete, // Callback for delete action
+    required this.onDelete,
   });
 
   final String reviewerName;
   final String reviewText;
   final int rating;
-  final VoidCallback onDelete; // Callback to handle review deletion
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
-        // Show a dialog on long press
-        _showDeleteDialog(context);
-      },
+      onLongPress: () => _showDeleteDialog(context),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           color: Colors.white,
-          border: Border.all(color: Colors.blue),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.black45,
-              blurRadius: 10,
-              blurStyle: BlurStyle.outer,
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 3),
             ),
           ],
+          border: Border.all(color: Colors.grey.shade200),
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -44,30 +42,49 @@ class ReviewWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: ColorsClass.lightGrey,
-                    child: const Icon(Icons.person, color: Colors.black),
+                    radius: 24, // Adjusted radius
+                    child: const Icon(Icons.person,
+                        color: Colors.black, size: 28), // Adjusted icon size
                   ),
-                  const SizedBox(width: 16),
-                  Text(
-                    reviewerName,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    // Use Expanded to prevent overflow
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          reviewerName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                          overflow: TextOverflow.ellipsis, // Handle long names
+                        ),
+                        Row(
+                          children: List.generate(5, (index) {
+                            if (index < rating) {
+                              return const Icon(Icons.star,
+                                  color: Colors.amber,
+                                  size: 18); // Adjusted star size
+                            } else {
+                              return const Icon(Icons.star_border,
+                                  color: Colors.amber, size: 18);
+                            }
+                          }),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Row(
-                children: List.generate(5, (index) {
-                  if (index < rating) {
-                    return const Icon(Icons.star, color: Colors.amber);
-                  } else {
-                    return const Icon(Icons.star_border, color: Colors.amber);
-                  }
-                }),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Text(
                 reviewText,
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Colors.black87,
+                ),
               ),
             ],
           ),
@@ -76,33 +93,30 @@ class ReviewWidget extends StatelessWidget {
     );
   }
 
-  // Function to show the delete dialog
   void _showDeleteDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Delete Review'),
-          content: const Text('Are you sure you want to delete this review?'),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          title: const Text('Delete Review',
+              style: TextStyle(fontWeight: FontWeight.w600)),
+          content: const Text('Are you sure you want to delete this review?',
+              style: TextStyle(color: Colors.black87)),
           actions: [
             TextButton(
-              onPressed: () {
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
             ),
             TextButton(
               onPressed: () {
-                // Call the onDelete callback to delete the review
                 onDelete();
-                // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('Delete',
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.w600)),
             ),
           ],
         );

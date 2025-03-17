@@ -1,36 +1,109 @@
 import 'package:flutter/material.dart';
 
-class FeatureWidget extends StatelessWidget {
+class FeatureWidget extends StatefulWidget {
   const FeatureWidget({
-    super.key,
+    Key? key,
     required this.name,
     required this.icon,
     required this.cityId,
     required this.onTap,
-  });
+    this.accentColor,
+    this.iconSize = 30,
+  }) : super(key: key);
 
   final String name;
   final IconData icon;
   final String cityId;
-  final VoidCallback onTap; // Use a callback instead of a path
+  final VoidCallback onTap;
+  final Color? accentColor;
+  final double iconSize;
+
+  @override
+  State<FeatureWidget> createState() => _FeatureWidgetState();
+}
+
+class _FeatureWidgetState extends State<FeatureWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 150),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.92).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor =
+        widget.accentColor ?? Theme.of(context).primaryColor;
+
     return GestureDetector(
-      onTap: onTap, // Use the callback
-      child: Container(
-        margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.blue.shade100,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      onTapDown: (_) => _controller.forward(),
+      onTapUp: (_) => _controller.reverse(),
+      onTapCancel: () => _controller.reverse(),
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: child,
+          );
+        },
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 40),
+            Material(
+              elevation: 4,
+              shadowColor: primaryColor.withOpacity(0.3),
+              shape: const CircleBorder(),
+              child: Container(
+                width: 65,
+                height: 65,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      primaryColor.withOpacity(0.9),
+                      primaryColor,
+                    ],
+                  ),
+                ),
+                child: Icon(
+                  widget.icon,
+                  size: widget.iconSize,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(name, style: const TextStyle(fontSize: 16)),
+            Text(
+              widget.name,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+                letterSpacing: 0.2,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),

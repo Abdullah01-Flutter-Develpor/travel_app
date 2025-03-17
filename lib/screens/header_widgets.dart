@@ -38,10 +38,10 @@ class HeaderWidgets extends StatelessWidget {
               ),
             ],
           ),
-          const CircleAvatar(
-            radius: 30,
-            backgroundImage: AssetImage('assets2/images/hunza.jpg'),
-          )
+          // const CircleAvatar(
+          //   radius: 30,
+          //   backgroundImage: AssetImage('assets2/images/hunza.jpg'),
+          // ),
         ],
       ),
     );

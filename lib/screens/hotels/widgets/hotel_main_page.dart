@@ -2,11 +2,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/screens/hotels/widgets/add_hotel_dialog.dart';
-import 'package:travel_app/screens/hotels/widgets/hotel_card_delet.dart';
+import 'package:travel_app/screens/hotels/widgets/hotel_card.dart';
 import 'package:travel_app/screens/hotels/widgets/model_class.dart/model_class.dart';
 
 class HotelMainPage extends StatefulWidget {
-  final String cityId; // Add cityId parameter
+  final String cityId;
 
   const HotelMainPage({super.key, required this.cityId});
 
@@ -22,7 +22,7 @@ class _HotelMainPageState extends State<HotelMainPage> {
     try {
       final docRef = _firestore
           .collection('cities')
-          .doc(widget.cityId) // Use cityId to add hotel
+          .doc(widget.cityId)
           .collection('hotels')
           .doc();
       await docRef.set({
@@ -44,7 +44,7 @@ class _HotelMainPageState extends State<HotelMainPage> {
     try {
       await _firestore
           .collection('cities')
-          .doc(widget.cityId) // Use cityId to delete hotel
+          .doc(widget.cityId)
           .collection('hotels')
           .doc(docId)
           .delete();
@@ -54,8 +54,6 @@ class _HotelMainPageState extends State<HotelMainPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error deleting hotel: $e')),
       );
-    } finally {
-      setState(() => _deletingIds.remove(docId));
     }
   }
 
@@ -70,7 +68,7 @@ class _HotelMainPageState extends State<HotelMainPage> {
         child: StreamBuilder<QuerySnapshot>(
           stream: _firestore
               .collection('cities')
-              .doc(widget.cityId) // Fetch hotels for the specific city
+              .doc(widget.cityId)
               .collection('hotels')
               .orderBy('createdAt', descending: true)
               .snapshots(),
@@ -105,8 +103,11 @@ class _HotelMainPageState extends State<HotelMainPage> {
                 final doc = snapshot.data!.docs[index];
                 final isDeleting = _deletingIds.contains(doc.id);
 
-                return HotelCardWithDelete(
-                  hotel: hotel,
+                return HotelPageCard(
+                  hotelName: hotel.hotelName,
+                  hotelAddress: hotel.hotelAddress,
+                  hotelPerNightStay: hotel.hotelPerNightStay,
+                  image: hotel.hotelImage,
                   onDelete: () => _deleteHotel(doc.id, hotel.hotelImage),
                   isDeleting: isDeleting,
                 );
