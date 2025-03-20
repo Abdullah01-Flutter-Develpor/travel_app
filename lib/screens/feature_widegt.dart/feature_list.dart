@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:travel_app/l10n/app_localizations.dart';
 import 'package:travel_app/routers/route_path_class.dart';
 import 'package:travel_app/screens/feature_widegt.dart/feature_widget.dart';
 
@@ -21,33 +22,6 @@ class _FeaturesListState extends State<FeaturesList>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
-
-  final List<Map<String, dynamic>> features = [
-    {
-      'name': 'Recommended',
-      'icon': Icons.recommend,
-      'route': RoutePathClass.pathRecomended,
-      'color': Color(0xFF4CAF50), // green
-    },
-    {
-      'name': 'Guide',
-      'icon': Icons.person,
-      'route': RoutePathClass.pathGuide,
-      'color': Color(0xFF2196F3), // blue
-    },
-    {
-      'name': 'Gallery',
-      'icon': Icons.photo,
-      'route': RoutePathClass.pathGallery,
-      'color': Color(0xFFFF9800), // orange
-    },
-    {
-      'name': 'Hotels',
-      'icon': Icons.hotel,
-      'route': RoutePathClass.pathHotels,
-      'color': Color(0xFF9C27B0), // purple
-    },
-  ];
 
   @override
   void initState() {
@@ -73,6 +47,32 @@ class _FeaturesListState extends State<FeaturesList>
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> features = [
+      {
+        'name': AppLocalizations.of(context).recommended, // Localized name
+        'icon': Icons.recommend,
+        'route': RoutePathClass.pathRecomended,
+        'color': Color(0xFF4CAF50), // green
+      },
+      {
+        'name': AppLocalizations.of(context).guide, // Localized name
+        'icon': Icons.person,
+        'route': RoutePathClass.pathGuide,
+        'color': Color(0xFF2196F3), // blue
+      },
+      {
+        'name': AppLocalizations.of(context).gallery, // Localized name
+        'icon': Icons.photo,
+        'route': RoutePathClass.pathGallery,
+        'color': Color(0xFFFF9800), // orange
+      },
+      {
+        'name': AppLocalizations.of(context).hotels, // Localized name
+        'icon': Icons.hotel,
+        'route': RoutePathClass.pathHotels,
+        'color': Color(0xFF9C27B0), // purple
+      },
+    ];
     return Container(
       height: 120,
       decoration: BoxDecoration(

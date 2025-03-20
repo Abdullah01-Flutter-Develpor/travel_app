@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +21,7 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
   final TextEditingController _priceController = TextEditingController();
   File? _image;
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     try {
@@ -41,6 +44,10 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
 
   Future<void> _addHotel() async {
     if (_formKey.currentState!.validate() && _image != null) {
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
         final storageRef = FirebaseStorage.instance
             .ref()
@@ -62,7 +69,11 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: ${e.toString()}')),
         );
-      } finally {}
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -97,6 +108,11 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
               _buildFormFields(),
               const SizedBox(height: 20),
               _buildSubmitButton(),
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),
@@ -221,7 +237,7 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 3,
         ),
-        onPressed: _addHotel,
+        onPressed: _isLoading ? null : _addHotel,
       ),
     );
   }

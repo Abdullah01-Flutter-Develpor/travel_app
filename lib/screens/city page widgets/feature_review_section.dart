@@ -14,38 +14,36 @@ class FeaturesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Explore Features',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: theme.primaryColor,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Navigate to full features list
-                },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                    color: theme.primaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text(
+        //         AppLocalizations.of(context).explore,
+        //         style: TextStyle(
+        //           fontSize: 20,
+        //           fontWeight: FontWeight.bold,
+        //           color: theme.primaryColor,
+        //         ),
+        //       ),
+        //       TextButton(
+        //         onPressed: () {
+        //           // Navigate to full features list
+        //         },
+        //         child: Text(
+        //           'See All',
+        //           style: TextStyle(
+        //             color: theme.primaryColor,
+        //             fontWeight: FontWeight.w600,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: FeaturesList(

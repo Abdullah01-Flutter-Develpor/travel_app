@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/l10n/app_localizations.dart';
+import 'package:travel_app/l10n/traslates_city.dart';
 
 class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String cityName;
@@ -26,7 +28,7 @@ class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
         opacity: showTitle ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 250),
         child: Text(
-          cityName,
+          getTranslatedCityName(context, cityName),
           style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
@@ -43,9 +45,10 @@ class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(Icons.bookmark_border, color: Colors.white),
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('City saved to favorites'),
-                duration: Duration(seconds: 2),
+              SnackBar(
+                content:
+                    Text(AppLocalizations.of(context).citySavedToFavorites),
+                duration: const Duration(seconds: 2),
               ),
             );
           },
@@ -63,35 +66,53 @@ class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Text(
-            'Select Language',
-            style: TextStyle(
-              color: theme.primaryColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: DropdownButton<Locale>(
-            isExpanded: true,
-            underline: Container(
-              height: 2,
-              color: theme.primaryColor,
-            ),
-            value: Localizations.localeOf(context),
-            items: const [
-              DropdownMenuItem(value: Locale('en'), child: Text('English')),
-              DropdownMenuItem(value: Locale('ur'), child: Text('اردو')),
-            ],
-            onChanged: (value) {
-              if (value != null) {
-                onLocaleChanged(value);
-                Navigator.pop(context);
-              }
-            },
-          ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            final currentLocale = Localizations.localeOf(context);
+            final otherLocale = currentLocale.languageCode == 'en'
+                ? const Locale('ur')
+                : const Locale('en');
+
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                AppLocalizations.of(context).selectLanguage,
+                style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: DropdownButton<Locale>(
+                isExpanded: true,
+                underline: Container(
+                  height: 2,
+                  color: theme.primaryColor,
+                ),
+                value: currentLocale,
+                items: [
+                  DropdownMenuItem(
+                    value: currentLocale,
+                    child: Text(currentLocale.languageCode == 'en'
+                        ? 'English'
+                        : 'اردو'),
+                  ),
+                  DropdownMenuItem(
+                    value: otherLocale,
+                    child: Text(
+                        otherLocale.languageCode == 'en' ? 'English' : 'اردو'),
+                  ),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    onLocaleChanged(value);
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            );
+          },
         );
       },
     );

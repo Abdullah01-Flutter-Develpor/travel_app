@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:travel_app/component/app_colors.dart';
 import 'package:travel_app/component/text_style.dart';
 import 'package:travel_app/screens/auth/login_screen.dart';
@@ -8,14 +7,14 @@ import 'package:travel_app/screens/auth/login_screen.dart';
 import '../../component/app_button.dart';
 import '../../control_room/firebase_reference.dart';
 
-class profileScreen extends StatefulWidget {
-  const profileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<profileScreen> createState() => _profileScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _profileScreenState extends State<profileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   String? email, address, phone, cnic, districts, Date;
   String? name;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -28,7 +27,9 @@ class _profileScreenState extends State<profileScreen> {
         child: appButton(
           title: "Logout",
           onPressed: () {
-            Get.off(LoginScreen());
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
             FirebaseReference().auth.signOut();
           },
         ),

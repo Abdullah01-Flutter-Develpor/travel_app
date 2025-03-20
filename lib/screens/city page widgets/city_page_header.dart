@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:travel_app/l10n/app_localizations.dart';
+import 'package:travel_app/l10n/traslates_city.dart';
 import 'package:travel_app/screens/city%20page%20widgets/weather%20/city_weather_data.dart';
 
 class CityHeader extends StatelessWidget {
@@ -23,7 +25,7 @@ class CityHeader extends StatelessWidget {
       height: screenSize.height * 0.4,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(imageUrl),
+          image: AssetImage(imageUrl), // Use the provided image URL
           fit: BoxFit.cover,
         ),
         gradient: LinearGradient(
@@ -52,7 +54,8 @@ class CityHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  cityName,
+                  getTranslatedCityName(
+                      context, cityName), // Localized city name
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 36,
@@ -66,7 +69,7 @@ class CityHeader extends StatelessWidget {
                     ],
                   ),
                 ),
-                _buildLocationTag(),
+                _buildLocationTag(context),
               ],
             ),
           ),
@@ -75,7 +78,7 @@ class CityHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationTag() {
+  Widget _buildLocationTag(BuildContext context) {
     return FutureBuilder<List<ConnectivityResult>>(
       future: Connectivity().checkConnectivity(),
       builder: (context, snapshot) {
@@ -100,9 +103,9 @@ class CityHeader extends StatelessWidget {
               const SizedBox(width: 4),
               hasInternet
                   ? CityTemperature(cityName: cityName)
-                  : const Text(
-                      "No internet",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                  : Text(
+                      AppLocalizations.of(context).noInternet,
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
                     ),
             ],
           ),

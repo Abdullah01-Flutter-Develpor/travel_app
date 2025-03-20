@@ -1,5 +1,3 @@
-// ignore_for_file: unused_field
-
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
@@ -12,6 +10,7 @@ import 'package:travel_app/component/text_style.dart';
 import 'package:travel_app/control_room/control_data.dart';
 import 'package:travel_app/screens/auth/signup_screen.dart';
 import 'package:travel_app/uitlity/validatetion.dart';
+import 'package:go_router/go_router.dart'; // import GoRouter
 
 import 'forgot_screen.dart';
 
@@ -28,11 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final _key = GlobalKey<FormState>();
   bool obscuresText = true;
-  bool _isLoading = false;
 
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3)).then((value) {
+    Future.delayed(const Duration(seconds: 3)).then((value) {
       FlutterNativeSplash.remove();
     });
     super.initState();
@@ -51,14 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 Image.asset(
                   appImages.newicon,
                   height: 240,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 customTextField(
@@ -67,19 +65,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) {
                     return validateEmail(value, context);
                   },
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.email,
                     size: 23,
                   ),
                   Controller: emailController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 customTextField(
                   obscureText: obscuresText,
                   labelText: "Enter Password",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.lock_outline,
                     size: 23,
                   ),
@@ -97,13 +95,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         size: 20,
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Align(
                   child: InkWell(
                       onTap: () {
-                        Get.to(ForgotScreen());
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const ForgotScreen()),
+                        );
                       },
                       child: Text(
                         'Forgot Password?',
@@ -114,22 +115,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       )),
                   alignment: Alignment.centerRight,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 appButton(
                   title: "Sign in",
                   onPressed: () async {
                     if (_key.currentState!.validate()) {
-                      return dataController.login(
+                      try {
+                        await dataController.login(
                           context: context,
                           email: emailController.text.toString(),
-                          password: passwordController.text);
+                          password: passwordController.text,
+                        );
+
+                        // Assuming you are using GoRouter
+                        context.go('/'); // Navigate to home
+                      } catch (e) {
+                        // Handle login errors here
+                        print('Login error: $e');
+                      }
                     }
                   },
-                  loading: false,
+                  loading: dataController.isLoading.value,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
@@ -143,12 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.black,
                           fontSize: 15),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 3,
                     ),
                     InkWell(
                         onTap: () {
-                          Get.to(SignupScreen());
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const SignupScreen()),
+                          );
                         },
                         child: Text(
                           "Register",

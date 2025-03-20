@@ -101,11 +101,11 @@ abstract class AppLocalizations {
   /// **'Hunza'**
   String get hunza;
 
-  /// No description provided for @recomended.
+  /// No description provided for @recommended.
   ///
   /// In en, this message translates to:
   /// **'Recommended'**
-  String get recomended;
+  String get recommended;
 
   /// No description provided for @guide.
   ///
@@ -124,6 +124,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hotels'**
   String get hotels;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'online'**
+  String get online;
+
+  /// No description provided for @tapToExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'tap to expand'**
+  String get tapToExpand;
+
+  /// No description provided for @offlineMode.
+  ///
+  /// In en, this message translates to:
+  /// **'offline mode'**
+  String get offlineMode;
+
+  /// No description provided for @viewingSavedMapOf.
+  ///
+  /// In en, this message translates to:
+  /// **'viewing saved map of'**
+  String get viewingSavedMapOf;
+
+  /// No description provided for @connectToInternetForFullFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'connect to internet for full features'**
+  String get connectToInternetForFullFeatures;
+
+  /// No description provided for @noMapAvailableFor.
+  ///
+  /// In en, this message translates to:
+  /// **'no map available for'**
+  String get noMapAvailableFor;
+
+  /// No description provided for @connectToTheInternetToViewThisMap.
+  ///
+  /// In en, this message translates to:
+  /// **'connect to the internet to view this map'**
+  String get connectToTheInternetToViewThisMap;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'try again'**
+  String get tryAgain;
+
+  /// No description provided for @offlineMap.
+  ///
+  /// In en, this message translates to:
+  /// **'offline map'**
+  String get offlineMap;
+
+  /// No description provided for @youAreViewingASavedVersionOfThe.
+  ///
+  /// In en, this message translates to:
+  /// **'you are viewing a saved version of the'**
+  String get youAreViewingASavedVersionOfThe;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'ok'**
+  String get ok;
+
+  /// No description provided for @checkConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'check connection'**
+  String get checkConnection;
+
+  /// No description provided for @cannotOpenMapNoInternetConnectionOrSavedMapAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'cannot open map. no internet connection or saved map available.'**
+  String get cannotOpenMapNoInternetConnectionOrSavedMapAvailable;
+
+  /// No description provided for @explore.
+  ///
+  /// In en, this message translates to:
+  /// **'explore'**
+  String get explore;
+
+  /// No description provided for @locationServicesUnavailableInOfflineMode.
+  ///
+  /// In en, this message translates to:
+  /// **'location services unavailable in offline mode'**
+  String get locationServicesUnavailableInOfflineMode;
+
+  /// No description provided for @youAreViewingASavedMapSomeFeaturesMayBeLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'you are viewing a saved map. some features may be limited.'**
+  String get youAreViewingASavedMapSomeFeaturesMayBeLimited;
+
+  /// No description provided for @reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'reviews'**
+  String get reviews;
+
+  /// No description provided for @localUser.
+  ///
+  /// In en, this message translates to:
+  /// **'local user'**
+  String get localUser;
+
+  /// No description provided for @noReviewsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'no reviews available.'**
+  String get noReviewsAvailable;
+
+  /// No description provided for @failedToDeleteReview.
+  ///
+  /// In en, this message translates to:
+  /// **'failed to delete review:'**
+  String get failedToDeleteReview;
+
+  /// No description provided for @citySavedToFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'city saved to favorites'**
+  String get citySavedToFavorites;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'select language'**
+  String get selectLanguage;
+
+  /// No description provided for @noImageUrlProvidedUsingDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'no image url provided, using default.'**
+  String get noImageUrlProvidedUsingDefault;
+
+  /// No description provided for @noInternet.
+  ///
+  /// In en, this message translates to:
+  /// **'no internet'**
+  String get noInternet;
+
+  /// No description provided for @islamabad.
+  ///
+  /// In en, this message translates to:
+  /// **'Islamabad'**
+  String get islamabad;
+
+  /// No description provided for @lahore.
+  ///
+  /// In en, this message translates to:
+  /// **'Lahore'**
+  String get lahore;
+
+  /// No description provided for @peshawar.
+  ///
+  /// In en, this message translates to:
+  /// **'Peshawar'**
+  String get peshawar;
+
+  /// No description provided for @murree.
+  ///
+  /// In en, this message translates to:
+  /// **'Murree'**
+  String get murree;
+
+  /// No description provided for @gilgit.
+  ///
+  /// In en, this message translates to:
+  /// **'Gilgit'**
+  String get gilgit;
+
+  /// No description provided for @skardu.
+  ///
+  /// In en, this message translates to:
+  /// **'Skardu'**
+  String get skardu;
+
+  /// No description provided for @swat.
+  ///
+  /// In en, this message translates to:
+  /// **'Swat'**
+  String get swat;
+
+  /// No description provided for @chitral.
+  ///
+  /// In en, this message translates to:
+  /// **'Chitral'**
+  String get chitral;
+
+  /// No description provided for @kumrat.
+  ///
+  /// In en, this message translates to:
+  /// **'Kumrat'**
+  String get kumrat;
+
+  /// No description provided for @kelashValley.
+  ///
+  /// In en, this message translates to:
+  /// **'Kelash Valley'**
+  String get kelashValley;
+
+  /// No description provided for @jahazBanda.
+  ///
+  /// In en, this message translates to:
+  /// **'Jahaz Banda'**
+  String get jahazBanda;
+
+  /// No description provided for @tirahValley.
+  ///
+  /// In en, this message translates to:
+  /// **'Tirah Valley'**
+  String get tirahValley;
+
+  /// No description provided for @kashmir.
+  ///
+  /// In en, this message translates to:
+  /// **'Kashmir'**
+  String get kashmir;
+
+  /// No description provided for @neelumValley.
+  ///
+  /// In en, this message translates to:
+  /// **'Neelum Valley'**
+  String get neelumValley;
+
+  /// No description provided for @kel.
+  ///
+  /// In en, this message translates to:
+  /// **'Kel'**
+  String get kel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -25,6 +25,7 @@ class _GuideAdditionDialogState extends State<GuideAdditionDialog> {
   final TextEditingController _vehicleController = TextEditingController();
   File? _image;
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     try {
@@ -47,6 +48,10 @@ class _GuideAdditionDialogState extends State<GuideAdditionDialog> {
 
   Future<void> _addGuide() async {
     if (_formKey.currentState!.validate() && _image != null) {
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
         final storageRef = FirebaseStorage.instance
             .ref()
@@ -71,6 +76,10 @@ class _GuideAdditionDialogState extends State<GuideAdditionDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: ${e.toString()}')),
         );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -106,6 +115,11 @@ class _GuideAdditionDialogState extends State<GuideAdditionDialog> {
               _buildFormFields(),
               const SizedBox(height: 20),
               _buildSubmitButton(),
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),
@@ -237,7 +251,7 @@ class _GuideAdditionDialogState extends State<GuideAdditionDialog> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 3,
         ),
-        onPressed: _addGuide,
+        onPressed: _isLoading ? null : _addGuide,
       ),
     );
   }

@@ -38,22 +38,20 @@ class _SignupScreenState extends State<SignupScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
-
                 Image.asset(
                   appImages.newicon,
                   height: 230,
                 ),
-
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 customTextField(
                   obscureText: false,
                   labelText: "Enter Name",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.person,
                     size: 24,
                   ),
@@ -63,13 +61,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   maxLines: 1,
                   Controller: nameController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 customTextField(
                   obscureText: false,
                   labelText: "Enter Email",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.email,
                     size: 23,
                   ),
@@ -78,13 +76,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                   Controller: emailController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 customTextField(
                   obscureText: obscuresText,
                   labelText: "Enter Password",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.lock_outline,
                     size: 23,
                   ),
@@ -102,31 +100,27 @@ class _SignupScreenState extends State<SignupScreen> {
                         size: 20,
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
-                // customTextField(obscureText: obscuresText,labelText: "Confirm Password",prefixIcon: Icon(Icons.lock_outline,size: 23,),maxLines: 1,
-                // ),
-
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-
                 appButton(
                   title: "Register",
                   onPressed: () {
                     if (_key.currentState!.validate()) {
-                      return dataController.register(
-                          context: context,
-                          email: emailController.text.toString(),
-                          name: nameController.text.toString(),
-                          password: passwordController.text);
+                      dataController.register(
+                        context: context,
+                        email: emailController.text.trim(),
+                        name: nameController.text.trim(),
+                        password: passwordController.text,
+                      );
                     }
                   },
-                  loading: false,
+                  loading: dataController.isLoading.value,
                 ),
-
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
@@ -137,12 +131,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       "Already have a account?",
                       style: appTextstyle.normalText(fontSize: 16),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 3,
                     ),
                     InkWell(
                         onTap: () {
-                          Get.off(LoginScreen());
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
                         },
                         child: Text(
                           "Sign in",
@@ -153,7 +151,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         )),
                   ],
                 )),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],

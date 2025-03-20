@@ -26,7 +26,7 @@ class ReviewPage extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemExtent: itemHeight * 0.25,
+      itemExtent: itemHeight * 0.40,
       itemCount: localReviews.length,
       itemBuilder: (context, index) {
         return Padding(

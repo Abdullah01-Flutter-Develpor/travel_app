@@ -1,4 +1,3 @@
-// recomended_place_card.dart
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
@@ -69,6 +68,14 @@ class RecomendedPlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate card dimensions based on screen size
+    final cardWidth = screenWidth * 0.9; // 90% of screen width
+    final cardHeight = screenHeight * 0.25; // 25% of screen height
+
     return GestureDetector(
       onLongPress: () => _shareImage(context), // Share on long press
       child: Card(
@@ -77,77 +84,97 @@ class RecomendedPlaceCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
         shadowColor: Colors.black.withOpacity(0.2),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Image.network(
-                recomendedPlaceImage,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Center(child: Icon(Icons.broken_image));
-                },
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
+        child: SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // Image with gradient overlay
+              ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.black.withOpacity(0.7),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      recomendedPlaceName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 3.0,
-                            color: Colors.black,
-                            offset: Offset(1, 1),
-                          )
-                        ],
+                child: Image.network(
+                  recomendedPlaceImage,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(child: Icon(Icons.broken_image));
+                  },
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deleteRecommendation(context),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
-            ),
-          ],
+              // Gradient overlay
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.7),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+              // Place name and delete button
+              Padding(
+                padding:
+                    EdgeInsets.all(screenWidth * 0.03), // Responsive padding
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Place name
+                      Flexible(
+                        child: Text(
+                          recomendedPlaceName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize:
+                                screenWidth * 0.04, // Responsive font size
+                            fontWeight: FontWeight.w600,
+                            shadows: const [
+                              Shadow(
+                                blurRadius: 3.0,
+                                color: Colors.black,
+                                offset: Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          maxLines: 2, // Allow text to wrap to 2 lines
+                          overflow: TextOverflow.ellipsis, // Truncate if needed
+                        ),
+                      ),
+                      // Delete button
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          iconSize: screenWidth * 0.06, // Responsive icon size
+                          onPressed: () => _deleteRecommendation(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
