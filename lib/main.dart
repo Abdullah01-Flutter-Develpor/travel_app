@@ -19,8 +19,9 @@ void main() async {
   await SessionControler().initializeSession();
   Get.put(DataController());
 
-  // Initialize router without locale callback here
-  await AppRouter.initRouter((locale) {});
+  await AppRouter.initRouter((locale) {
+    Get.find<MyAppState>().updateLocale(locale);
+  });
 
   runApp(const MyApp());
   FlutterNativeSplash.remove();
@@ -30,10 +31,10 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   Locale _locale = const Locale('en');
   final DataController _dataController = Get.find<DataController>();
 
@@ -54,6 +55,10 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = newLocale;
     });
+  }
+
+  void updateLocale(Locale newLocale) {
+    _updateLocale(newLocale);
   }
 
   Future<void> _updateAuthStatus() async {
@@ -86,7 +91,6 @@ class _MyAppState extends State<MyApp> {
       routerDelegate: AppRouter.router.routerDelegate,
       routeInformationParser: AppRouter.router.routeInformationParser,
       routeInformationProvider: AppRouter.router.routeInformationProvider,
-      // onGenerateTitle: (context) => AppLocalizations.of(context)!.travelApp,
     );
   }
 }

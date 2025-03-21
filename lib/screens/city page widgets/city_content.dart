@@ -50,7 +50,6 @@ class _CityContentState extends State<CityContent> {
     'Kel': LatLng(35.7000, 71.6833),
   };
 
-  // Stream subscription for connectivity changes
   StreamSubscription? _connectivitySubscription;
 
   @override
@@ -63,7 +62,6 @@ class _CityContentState extends State<CityContent> {
     );
     _checkConnectivity();
 
-    // Listen for connectivity changes
     _connectivitySubscription =
         Connectivity().onConnectivityChanged.listen((result) {
       setState(() {
@@ -82,7 +80,6 @@ class _CityContentState extends State<CityContent> {
   Future<void> _checkConnectivity() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
-
       setState(() {
         _isConnected = connectivityResult.contains(ConnectivityResult.wifi) ||
             connectivityResult.contains(ConnectivityResult.mobile);
@@ -102,13 +99,17 @@ class _CityContentState extends State<CityContent> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
           _isCheckingConnectivity
               ? const Center(child: CircularProgressIndicator())
               : _buildMapSection(),
+          const SizedBox(height: 16),
           ActionButtonsRow(cityName: widget.cityName, cityId: widget.cityId),
+          const SizedBox(height: 16),
           FeaturesSection(cityName: widget.cityName, cityId: widget.cityId),
+          const SizedBox(height: 16),
           ReviewsSection(cityId: widget.cityId),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -125,23 +126,18 @@ class _CityContentState extends State<CityContent> {
   }
 
   Widget _buildOnlineMap() {
-    if (!_isMapLoaded) {
-      setState(() {
-        _isMapLoaded = true;
-      });
-    }
     return GestureDetector(
       onTap: () => _openFullScreenMap(context),
       child: Hero(
         tag: 'mapPreviewHeroTag',
         child: Container(
           height: 200,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withOpacity(0.3),
                 spreadRadius: 2,
                 blurRadius: 5,
                 offset: const Offset(0, 3),
@@ -186,8 +182,8 @@ class _CityContentState extends State<CityContent> {
                 ),
               ),
               Positioned(
-                bottom: 8,
-                right: 8,
+                top: 8, // Move to the top
+                right: 8, // Align to the right
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -197,10 +193,9 @@ class _CityContentState extends State<CityContent> {
                   ),
                   child: Text(
                     AppLocalizations.of(context).tapToExpand,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                   ),
                 ),
               ),
@@ -216,11 +211,10 @@ class _CityContentState extends State<CityContent> {
                   ),
                   child: Text(
                     AppLocalizations.of(context).online,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                   ),
                 ),
               ),
@@ -236,12 +230,12 @@ class _CityContentState extends State<CityContent> {
       onTap: () => _showOfflineMapDialog(),
       child: Container(
         height: 200,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 5,
               offset: const Offset(0, 3),
@@ -269,7 +263,7 @@ class _CityContentState extends State<CityContent> {
                   infoWindow: InfoWindow(title: widget.cityName),
                 ),
               },
-              liteModeEnabled: true, // Use lite mode for offline maps
+              liteModeEnabled: true,
               mapToolbarEnabled: false,
               cameraTargetBounds: CameraTargetBounds(
                 LatLngBounds(
@@ -298,11 +292,10 @@ class _CityContentState extends State<CityContent> {
                 ),
                 child: Text(
                   AppLocalizations.of(context).offlineMode,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
               ),
             ),
@@ -317,19 +310,19 @@ class _CityContentState extends State<CityContent> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.wifi_off, size: 32),
+                    const Icon(Icons.wifi_off, size: 32, color: Colors.grey),
                     const SizedBox(height: 8),
                     Text(
                       '${AppLocalizations.of(context).viewingSavedMapOf} ${getTranslatedCityName(context, widget.cityName)}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       AppLocalizations.of(context)
                           .connectToInternetForFullFeatures,
-                      style: const TextStyle(fontSize: 12),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -344,13 +337,13 @@ class _CityContentState extends State<CityContent> {
   Widget _buildNoConnectionNoCache() {
     return Container(
       height: 200,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -365,19 +358,15 @@ class _CityContentState extends State<CityContent> {
             const SizedBox(height: 8),
             Text(
               '${AppLocalizations.of(context).noMapAvailableFor} ${getTranslatedCityName(context, widget.cityName)}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 4),
             Text(
               AppLocalizations.of(context).connectToTheInternetToViewThisMap,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
             ElevatedButton.icon(
@@ -387,11 +376,13 @@ class _CityContentState extends State<CityContent> {
                 });
                 await _checkConnectivity();
               },
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh, size: 16),
               label: Text(AppLocalizations.of(context).tryAgain),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
             ),
           ],
@@ -410,9 +401,7 @@ class _CityContentState extends State<CityContent> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             child: Text(AppLocalizations.of(context).ok),
           ),
           TextButton(

@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gallery => 'Gallery';
 
   @override
+  String get cancel => 'Cancel';
+
+  @override
   String get hotels => 'Hotels';
 
   @override
@@ -54,7 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youAreViewingASavedVersionOfThe => 'you are viewing a saved version of the';
 
   @override
-  String get ok => 'ok';
+  String get ok => 'Ok';
 
   @override
   String get checkConnection => 'check connection';
@@ -72,10 +75,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youAreViewingASavedMapSomeFeaturesMayBeLimited => 'you are viewing a saved map. some features may be limited.';
 
   @override
-  String get reviews => 'reviews';
+  String get reviews => 'Reviews';
 
   @override
-  String get localUser => 'local user';
+  String get addReviews => 'Add Reviews';
+
+  @override
+  String get localUser => 'localuser';
 
   @override
   String get noReviewsAvailable => 'no reviews available.';
@@ -139,4 +145,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kel => 'Kel';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get urdu => 'Urdu';
+
+  @override
+  String get pashto => 'Pashto';
+
+  @override
+  String get sindhi => 'Sindhi';
+
+  @override
+  String get punjabi => 'Punjabi';
 }

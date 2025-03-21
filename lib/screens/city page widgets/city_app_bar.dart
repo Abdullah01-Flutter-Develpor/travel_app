@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+// import 'package:travel_app/l10n/app_localizations.dart';
 import 'package:travel_app/l10n/traslates_city.dart';
+import 'package:travel_app/routers/route_path_class.dart';
 
-class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CityAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String cityName;
   final bool showTitle;
   final Function(Locale) onLocaleChanged;
@@ -15,20 +17,32 @@ class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
+  State<CityAppBar> createState() => _CityAppBarState();
+
+  @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _CityAppBarState extends State<CityAppBar> {
+  // Locale? _dialogLocale; // Store the locale for the dialog
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return AppBar(
-      backgroundColor: showTitle ? theme.primaryColor : Colors.transparent,
-      elevation: showTitle ? 4 : 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => context.go(RoutePathClass.initialPath),
+      ),
+      backgroundColor:
+          widget.showTitle ? theme.primaryColor : Colors.transparent,
+      elevation: widget.showTitle ? 4 : 0,
       title: AnimatedOpacity(
-        opacity: showTitle ? 1.0 : 0.0,
+        opacity: widget.showTitle ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 250),
         child: Text(
-          getTranslatedCityName(context, cityName),
+          getTranslatedCityName(context, widget.cityName),
           style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
@@ -39,19 +53,8 @@ class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.language, color: Colors.white),
-          onPressed: () => _showLanguageDialog(context, onLocaleChanged, theme),
-        ),
-        IconButton(
-          icon: const Icon(Icons.bookmark_border, color: Colors.white),
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    Text(AppLocalizations.of(context).citySavedToFavorites),
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          },
+          onPressed: () =>
+              _showLanguageDialog(context, widget.onLocaleChanged, theme),
         ),
       ],
       iconTheme: const IconThemeData(color: Colors.white),
@@ -63,54 +66,75 @@ class CityAppBar extends StatelessWidget implements PreferredSizeWidget {
     Function(Locale) onLocaleChanged,
     ThemeData theme,
   ) {
+    final ValueNotifier<Locale> _localeNotifier =
+        ValueNotifier(Localizations.localeOf(context));
+
     showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            final currentLocale = Localizations.localeOf(context);
-            final otherLocale = currentLocale.languageCode == 'en'
-                ? const Locale('ur')
-                : const Locale('en');
+        return ValueListenableBuilder<Locale>(
+          valueListenable: _localeNotifier,
+          builder: (context, selectedLocale, _) {
+            // Hardcoded Urdu text
+            final isUrdu = selectedLocale.languageCode == 'ur';
+            final title = isUrdu ? 'زبان منتخب کریں' : 'Select Language';
+            final englishLabel = isUrdu ? 'انگریزی' : 'English';
+            final urduLabel = isUrdu ? 'اردو' : 'Urdu';
+            final cancelText = isUrdu ? 'منسوخ کریں' : 'Cancel';
+            final okText = isUrdu ? 'ٹھیک ہے' : 'OK';
 
             return AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               title: Text(
-                AppLocalizations.of(context).selectLanguage,
+                title,
                 style: TextStyle(
                   color: theme.primaryColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              content: DropdownButton<Locale>(
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: theme.primaryColor,
-                ),
-                value: currentLocale,
-                items: [
-                  DropdownMenuItem(
-                    value: currentLocale,
-                    child: Text(currentLocale.languageCode == 'en'
-                        ? 'English'
-                        : 'اردو'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RadioListTile<Locale>(
+                    title: Text(englishLabel),
+                    value: const Locale('en'),
+                    groupValue: selectedLocale,
+                    onChanged: (Locale? value) {
+                      if (value != null) {
+                        _localeNotifier.value = value;
+                      }
+                    },
                   ),
-                  DropdownMenuItem(
-                    value: otherLocale,
-                    child: Text(
-                        otherLocale.languageCode == 'en' ? 'English' : 'اردو'),
+                  RadioListTile<Locale>(
+                    title: Text(urduLabel),
+                    value: const Locale('ur'),
+                    groupValue: selectedLocale,
+                    onChanged: (Locale? value) {
+                      if (value != null) {
+                        _localeNotifier.value = value;
+                      }
+                    },
                   ),
                 ],
-                onChanged: (value) {
-                  if (value != null) {
-                    onLocaleChanged(value);
-                    Navigator.pop(context);
-                  }
-                },
               ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(cancelText),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text(okText),
+                  onPressed: () {
+                    onLocaleChanged(
+                        _localeNotifier.value); // Update the app locale
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             );
           },
         );

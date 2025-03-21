@@ -39,7 +39,7 @@ class RecomendationPlacesPage extends StatelessWidget {
             return const Center(
               child: Text(
                 'No recommendations yet!',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
             );
           }

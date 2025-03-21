@@ -119,6 +119,12 @@ abstract class AppLocalizations {
   /// **'Gallery'**
   String get gallery;
 
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
   /// No description provided for @hotels.
   ///
   /// In en, this message translates to:
@@ -188,7 +194,7 @@ abstract class AppLocalizations {
   /// No description provided for @ok.
   ///
   /// In en, this message translates to:
-  /// **'ok'**
+  /// **'Ok'**
   String get ok;
 
   /// No description provided for @checkConnection.
@@ -224,13 +230,19 @@ abstract class AppLocalizations {
   /// No description provided for @reviews.
   ///
   /// In en, this message translates to:
-  /// **'reviews'**
+  /// **'Reviews'**
   String get reviews;
+
+  /// No description provided for @addReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Reviews'**
+  String get addReviews;
 
   /// No description provided for @localUser.
   ///
   /// In en, this message translates to:
-  /// **'local user'**
+  /// **'localuser'**
   String get localUser;
 
   /// No description provided for @noReviewsAvailable.
@@ -358,6 +370,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kel'**
   String get kel;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @urdu.
+  ///
+  /// In en, this message translates to:
+  /// **'Urdu'**
+  String get urdu;
+
+  /// No description provided for @pashto.
+  ///
+  /// In en, this message translates to:
+  /// **'Pashto'**
+  String get pashto;
+
+  /// No description provided for @sindhi.
+  ///
+  /// In en, this message translates to:
+  /// **'Sindhi'**
+  String get sindhi;
+
+  /// No description provided for @punjabi.
+  ///
+  /// In en, this message translates to:
+  /// **'Punjabi'**
+  String get punjabi;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

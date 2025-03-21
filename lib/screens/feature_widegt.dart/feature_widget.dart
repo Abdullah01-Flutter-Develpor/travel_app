@@ -63,48 +63,55 @@ class _FeatureWidgetState extends State<FeatureWidget>
             child: child,
           );
         },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Material(
-              elevation: 4,
-              shadowColor: primaryColor.withOpacity(0.3),
-              shape: const CircleBorder(),
-              child: Container(
-                width: 65,
-                height: 65,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      primaryColor.withOpacity(0.9),
-                      primaryColor,
-                    ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Material(
+                  elevation: 4,
+                  shadowColor: primaryColor.withOpacity(0.3),
+                  shape: const CircleBorder(),
+                  child: Container(
+                    width: 55, // Reduced circle width
+                    height: 55, // Reduced circle height
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          primaryColor.withOpacity(0.9),
+                          primaryColor,
+                        ],
+                      ),
+                    ),
+                    child: Icon(
+                      widget.icon,
+                      size: widget.iconSize * 0.9, // Reduced icon size slightly
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                child: Icon(
-                  widget.icon,
-                  size: widget.iconSize,
-                  color: Colors.white,
+                const SizedBox(height: 8),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: constraints.maxWidth),
+                  child: Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                      letterSpacing: 0.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.name,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-                letterSpacing: 0.2,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

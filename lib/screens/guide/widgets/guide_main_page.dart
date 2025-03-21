@@ -36,7 +36,12 @@ class GuideMainPageWidget extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print('Error: ${snapshot.error}');
-            return Center(child: Text('Something went wrong'));
+            return Center(
+              child: Text(
+                'No Guide yet!',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            );
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +50,10 @@ class GuideMainPageWidget extends StatelessWidget {
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             print('No guides found for cityId: $cityId');
-            return Center(child: Text('No guides available.'));
+            return Center(
+                child: Text(
+              'No guides available.',
+            ));
           }
 
           final guideDocs = snapshot.data!.docs;

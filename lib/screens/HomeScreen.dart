@@ -116,10 +116,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ],
                 title: Text(
-                  " Tourista ",
-                  style: appTextstyle.normalText(
-                      Colors: Colors.white, fontSize: 23),
+                  "Tourista",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                    shadows: [
+                      // Added a subtle shadow
+                      Shadow(
+                        blurRadius: 2.0,
+                        color: Colors.black.withOpacity(0.15),
+                        offset: Offset(1, 1),
+                      ),
+                    ],
+                  ),
                 ),
+                elevation: 2.0, // Added a subtle elevation
+                // No changes to layout or movement
               ),
               body: SingleChildScrollView(
                 child: Padding(

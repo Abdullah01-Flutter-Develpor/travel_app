@@ -21,6 +21,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get gallery => 'گیلری';
 
   @override
+  String get cancel => 'منسوخ کریں';
+
+  @override
   String get hotels => 'ہوٹل';
 
   @override
@@ -73,6 +76,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get reviews => 'جائزے';
+
+  @override
+  String get addReviews => 'جائزے شامل کریں';
 
   @override
   String get localUser => 'مقامی صارف';
@@ -139,4 +145,19 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get kel => 'کیل';
+
+  @override
+  String get english => 'انگریزی';
+
+  @override
+  String get urdu => 'اردو';
+
+  @override
+  String get pashto => 'پشتو';
+
+  @override
+  String get sindhi => 'سندھی';
+
+  @override
+  String get punjabi => 'پنجابی';
 }

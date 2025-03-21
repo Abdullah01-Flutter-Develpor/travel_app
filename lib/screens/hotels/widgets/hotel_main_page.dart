@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/screens/hotels/widgets/add_hotel_dialog.dart';
 import 'package:travel_app/screens/hotels/widgets/hotel_card.dart';
 import 'package:travel_app/screens/hotels/widgets/model_class.dart/model_class.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HotelMainPage extends StatefulWidget {
   final String cityId;
@@ -54,6 +55,8 @@ class _HotelMainPageState extends State<HotelMainPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error deleting hotel: $e')),
       );
+    } finally {
+      setState(() => _deletingIds.remove(docId));
     }
   }
 
@@ -78,7 +81,16 @@ class _HotelMainPageState extends State<HotelMainPage> {
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return _buildShimmerEffect();
+            }
+
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No Hotels yet!',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              );
             }
 
             final hotels = snapshot.data!.docs.map((doc) {
@@ -122,6 +134,29 @@ class _HotelMainPageState extends State<HotelMainPage> {
           builder: (_) => AddHotelDialog(onHotelAdded: _addHotel),
         ),
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          mainAxisExtent: 400,
+        ),
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          );
+        },
       ),
     );
   }

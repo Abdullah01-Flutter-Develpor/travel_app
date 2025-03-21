@@ -2,6 +2,7 @@
   "@@locale": "ur",
   "hunza": "ہنزہ",
   "recommended": "تجویز کردہ",
+  "cancel": "منسوخ کریں",
   "guide": "گائیڈ",
   "gallery": "گیلری",
   "hotels": "ہوٹل",
@@ -22,6 +23,7 @@
   "locationServicesUnavailableInOfflineMode": "آف لائن موڈ میں لوکیشن سروسز دستیاب نہیں ہیں",
   "youAreViewingASavedMapSomeFeaturesMayBeLimited": "آپ ایک محفوظ کردہ نقشہ دیکھ رہے ہیں۔ کچھ خصوصیات محدود ہو سکتی ہیں۔",
   "reviews": "جائزے",
+  "addReviews": "جائزے شامل کریں",
   "localUser": "مقامی صارف",
   "noReviewsAvailable": "کوئی جائزے دستیاب نہیں ہیں۔",
   "failedToDeleteReview": "جائزہ حذف کرنے میں ناکام:",
@@ -43,5 +45,10 @@
   "tirahValley": "تیراہ ویلی",
   "kashmir": "کشمیر",
   "neelumValley": "نیلم ویلی",
-  "kel": "کیل"
+  "kel": "کیل",
+   "english": "انگریزی",
+  "urdu": "اردو",
+  "pashto": "پشتو",
+  "sindhi": "سندھی",
+  "punjabi": "پنجابی"
 }

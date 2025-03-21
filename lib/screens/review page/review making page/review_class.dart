@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Review {
   final String id;
+  final String userId; // Added userId field
   final String userName;
   final String comment;
   final int rating;
@@ -10,6 +11,7 @@ class Review {
 
   Review({
     required this.id,
+    required this.userId, // Added userId parameter
     required this.userName,
     required this.comment,
     required this.rating,
@@ -22,11 +24,12 @@ class Review {
 
     return Review(
       id: id,
-      userName: json['userName'] ?? '', // Add null-aware operator
-      comment: json['comment'] ?? '', // Add null-aware operator
-      rating: json['rating'] ?? 0, // Add null-aware operator
-      timestamp: timestamp?.toDate() ?? DateTime.now(), // Handle null
-      cityId: json['cityId'] ?? '', // Add null-aware operator
+      userId: json['userId'] ?? '', // Extract userId from JSON
+      userName: json['userName'] ?? '',
+      comment: json['comment'] ?? '',
+      rating: json['rating'] ?? 0,
+      timestamp: timestamp?.toDate() ?? DateTime.now(),
+      cityId: json['cityId'] ?? '',
     );
   }
 }

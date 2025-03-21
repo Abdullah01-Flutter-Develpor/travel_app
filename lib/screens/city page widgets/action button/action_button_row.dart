@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/screens/city%20page%20widgets/action%20button/action_button_class.dart';
-// import 'package:travel_app/screens/map_launch.dart';
+import 'package:travel_app/l10n/app_localizations.dart';
 import 'package:travel_app/screens/review%20page/review%20making%20page/make_a_review_page_widget.dart';
 
 class ActionButtonsRow extends StatelessWidget {
@@ -22,10 +21,21 @@ class ActionButtonsRow extends StatelessWidget {
         children: [
           const SizedBox(width: 12),
           Expanded(
-            child: ActionButton(
-              icon: Icons.edit,
-              label: 'Add Review',
-              color: Colors.green,
+            child: ElevatedButton.icon(
+              // Changed to ElevatedButton.icon
+              icon: const Icon(Icons.edit, size: 20), // Reduced icon size
+              label: Text(
+                AppLocalizations.of(context).addReviews,
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12), // Adjust padding
+              ),
               onPressed: () => _showReviewSheet(context),
             ),
           ),

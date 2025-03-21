@@ -2,10 +2,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:staggered_grid_view/flutter_staggered_grid_view.dart';
-
 import 'package:travel_app/screens/gallery%20page/widgets/gallery_dialog.dart';
 import 'package:travel_app/screens/gallery%20page/widgets/image_card_with_delete.dart';
-
 import 'package:shimmer/shimmer.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
@@ -92,6 +90,15 @@ class _GalleryPageState extends State<GalleryPage> {
             return _buildShimmerEffect();
           }
 
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text(
+                'No Photos in Gallery yet!',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            );
+          }
+
           return StaggeredGridView.countBuilder(
             crossAxisCount: 2,
             mainAxisSpacing: 8,
@@ -140,7 +147,7 @@ class _GalleryPageState extends State<GalleryPage> {
         staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
         itemBuilder: (context, index) {
           return Container(
-            height: 250, // Increased height for shimmer effect
+            height: 250,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
