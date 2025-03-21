@@ -13,7 +13,7 @@ import 'package:travel_app/component/app_images.dart';
 import 'package:travel_app/component/text_style.dart';
 import 'package:travel_app/control_room/firebase_reference.dart';
 import 'package:travel_app/control_room/google_map_controller.dart';
-import 'package:travel_app/screens/UploadPage.dart';
+// import 'package:travel_app/screens/UploadPage.dart';
 import 'package:travel_app/screens/auth/profile_screen.dart';
 import 'package:travel_app/screens/view_screen.dart';
 import 'package:travel_app/search%20bar/widgets/search_bar_widgets.dart';
@@ -85,15 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: latitude == null
           ? Scaffold(body: Center(child: CircularProgressIndicator()))
           : Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ImageUploadScreen(),
-                    ),
-                  );
-                },
-              ),
+              // Floating Action Button Removed
               backgroundColor: appColors.whiteColor,
               appBar: AppBar(
                 backgroundColor: appColors.blueColor,
@@ -123,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
                     shadows: [
-                      // Added a subtle shadow
                       Shadow(
                         blurRadius: 2.0,
                         color: Colors.black.withOpacity(0.15),
@@ -132,8 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                elevation: 2.0, // Added a subtle elevation
-                // No changes to layout or movement
+                elevation: 2.0,
               ),
               body: SingleChildScrollView(
                 child: Padding(
